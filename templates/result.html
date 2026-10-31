@@ -1,274 +1,190 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet">
-
     <title>Analysis Results</title>
-    <style>
 
-    .chart-container {
-        position: relative;
-        height: 300px;
-        width: 100%;
-        max-width: 350px;
-        margin: auto;
-    }
+    <!-- Bootstrap CSS -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
 
-    </style>
+    <!-- Custom CSS -->
+    <link
+        href="/static/css/style.css"
+        rel="stylesheet"
+    >
 </head>
 
 <body>
+    <div class="container-fluid dashboard-container">
 
-<div class="container-fluid px-4 mt-4">
-
-    <!-- File Name -->
-    <div class="alert alert-info">
-        <strong>Analyzed File:</strong> {{ filename }}
-    </div>
-
-    <!-- Summary Cards -->
-    <div class="row">
-
-        <div class="col-lg-4 col-md-4 col-sm-12">
-            <div class="card text-bg-primary shadow">
-                <div class="card-body text-center">
-                    <h3>{{ info }}</h3>
-                    <h6 class="mb-0">Info Messages</h6>
-                </div>
-            </div>
+        <!-- Analyzed File -->
+        <div class="alert alert-info">
+            <strong>Analyzed File:</strong> {{ filename }}
         </div>
 
-        <div class="col-lg-4 col-md-4 col-sm-12">
-            <div class="card text-bg-warning shadow">
-                <div class="card-body text-center">
-                    <h3>{{ warning }}</h3>
-                    <h6 class="mb-0">Warnings</h6>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-4 col-md-4 col-sm-12">
-            <div class="card text-bg-danger shadow">
-                <div class="card-body text-center">
-                    <h3>{{ error }}</h3>
-                    <h6 class="mb-0">Errors</h6>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- Summary + Chart -->
-    <div class="row mt-4">
-
-        <div class="col-md-6">
-            <div class="card shadow h-100">
-                <div class="card-body">
-
-                    <h5>Summary</h5>
-
-                    <div class="alert alert-secondary">
-                        {{ summary }}
+        <!-- Log Count Cards -->
+        <div class="row g-3">
+            <div class="col-lg-4 col-md-4 col-sm-12">
+                <div class="card text-bg-primary shadow severity-card">
+                    <div class="card-body text-center">
+                        <h3>{{ info }}</h3>
+                        <h6 class="mb-0">Info Messages</h6>
                     </div>
-
                 </div>
             </div>
-        </div>
 
-        <div class="col-md-6">
-            <div class="card shadow h-100">
-                <div class="card-body text-center">
-
-                    <h5>Log Distribution</h5>
-
-                    <div class="chart-container">
-                        <canvas id="logChart"></canvas>
+            <div class="col-lg-4 col-md-4 col-sm-12">
+                <div class="card text-bg-warning shadow severity-card">
+                    <div class="card-body text-center">
+                        <h3>{{ warning }}</h3>
+                        <h6 class="mb-0">Warnings</h6>
                     </div>
-
                 </div>
             </div>
-        </div>
 
-    </div>
-
-    <div class="card shadow mt-4">
-    <div class="card-body">
-
-        <h5>AI Root Cause Analysis</h5>
-
-        <div class="alert alert-light mb-0">
-            <div style="white-space: pre-wrap;">{{ ai_result }}</div>
-        </div>
-
-    </div>
-</div>
-
-    <div class="card shadow mt-4">
-        <div class="card-body">
-
-            <h5>Recommendations</h5>
-
-            {% if recommendations %}
-
-            <ul>
-
-                {% for rec in recommendations %}
-
-                <li>{{ rec }}</li>
-
-                {% endfor %}
-
-            </ul>
-
-            {% else %}
-
-            <p>No recommendations available.</p>
-
-            {% endif %}
-
-        </div>
-    </div>
-
-    <!-- Warning and Error Tables -->
-    <div class="row mt-4">
-
-        <!-- Warnings -->
-        <div class="col-md-6">
-
-            <div class="card shadow h-100">
-                <div class="card-body">
-
-                    <h5>Warning Details</h5>
-
-                    <div style="max-height:200px; overflow-y:auto;">
-
-                        {% if warnings %}
-
-                        <table class="table table-sm table-striped">
-
-                            <thead>
-                                <tr>
-                                    <th>Warning Message</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-
-                                {% for warning in warnings %}
-                                <tr>
-                                    <td>{{ warning }}</td>
-                                </tr>
-                                {% endfor %}
-
-                            </tbody>
-
-                        </table>
-
-                        {% else %}
-
-                        <p>No warnings found.</p>
-
-                        {% endif %}
-
+            <div class="col-lg-4 col-md-4 col-sm-12">
+                <div class="card text-bg-danger shadow severity-card">
+                    <div class="card-body text-center">
+                        <h3>{{ error }}</h3>
+                        <h6 class="mb-0">Errors</h6>
                     </div>
-
                 </div>
             </div>
-
         </div>
 
-        <!-- Errors -->
-        <div class="col-md-6">
-
-            <div class="card shadow h-100">
-                <div class="card-body">
-
-                    <h5>Error Details</h5>
-
-                    <div style="max-height:200px; overflow-y:auto;">
-
-                        {% if errors %}
-
-                        <table class="table table-sm table-striped">
-
-                            <thead>
-                                <tr>
-                                    <th>Error Message</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-
-                                {% for error in errors %}
-                                <tr>
-                                    <td>{{ error }}</td>
-                                </tr>
-                                {% endfor %}
-
-                            </tbody>
-
-                        </table>
-
-                        {% else %}
-
-                        <p>No errors found.</p>
-
-                        {% endif %}
-
+        <!-- Summary and Chart -->
+        <div class="row g-3 mt-2">
+            <div class="col-md-6">
+                <div class="card shadow dashboard-card">
+                    <div class="card-body">
+                        <h5>Summary</h5>
+                        <div class="alert alert-secondary mb-0">
+                            {{ summary }}
+                        </div>
                     </div>
-
                 </div>
             </div>
 
+            <div class="col-md-6">
+                <div class="card shadow dashboard-card">
+                    <div class="card-body text-center">
+                        <h5>Log Distribution</h5>
+                        <div class="chart-container">
+                            <canvas
+                                id="logChart"
+                                data-info="{{ info }}"
+                                data-warning="{{ warning }}"
+                                data-error="{{ error }}"
+                            ></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Root Cause Analysis -->
+        <div class="card shadow mt-4">
+            <div class="card-body">
+                <h5>AI Root Cause Analysis</h5>
+                <div class="alert alert-light mb-0 ai-result">
+                    {{ ai_result }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Recommendations -->
+        <div class="card shadow mt-4">
+            <div class="card-body">
+                <h5>Recommendations</h5>
+
+                {% if recommendations %}
+                    <ul class="mb-0">
+                        {% for recommendation in recommendations %}
+                            <li>{{ recommendation }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="mb-0">No recommendations available.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Warning and Error Details -->
+        <div class="row g-3 mt-2">
+            <div class="col-md-6">
+                <div class="card shadow dashboard-card">
+                    <div class="card-body">
+                        <h5>Warning Details</h5>
+                        <div class="details-container">
+                            {% if warnings %}
+                                <table class="table table-sm table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Warning Message</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for warning_message in warnings %}
+                                            <tr>
+                                                <td>{{ warning_message }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% else %}
+                                <p class="mb-0">No warnings found.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card shadow dashboard-card">
+                    <div class="card-body">
+                        <h5>Error Details</h5>
+                        <div class="details-container">
+                            {% if errors %}
+                                <table class="table table-sm table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Error Message</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for error_message in errors %}
+                                            <tr>
+                                                <td>{{ error_message }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% else %}
+                                <p class="mb-0">No errors found.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analyze Another Log -->
+        <div class="text-center mt-4 mb-4">
+            <a href="/" class="btn btn-success">
+                Analyze Another Log
+            </a>
         </div>
 
     </div>
 
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <!-- Analyze Again Button -->
-    <div class="text-center mt-4 mb-4">
-        <a href="/" class="btn btn-success">
-            Analyze Another Log
-        </a>
-    </div>
-
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<script>
-
-const ctx = document.getElementById('logChart');
-
-new Chart(ctx, {
-    type: 'pie',
-    data: {
-        labels: ['Info', 'Warning', 'Error'],
-        datasets: [{
-            data: [
-                {{ info }},
-                {{ warning }},
-                {{ error }}
-            ],
-            backgroundColor: [
-                '#0d6efd',
-                '#ffc107',
-                '#dc3545'
-            ]
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false
-    }
-});
-
-</script>
-
+    <!-- Custom Chart JavaScript -->
+    <script src="/static/js/chart.js"></script>
 </body>
 </html>

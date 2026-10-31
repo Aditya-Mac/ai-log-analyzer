@@ -1,0 +1,45 @@
+body {
+    margin: 0;
+    background-color: #f5f7fa;
+}
+
+.dashboard-container {
+    width: 100%;
+    padding: 12px 16px;
+}
+
+.chart-container {
+    position: relative;
+    width: 100%;
+    max-width: 350px;
+    height: 300px;
+    margin: auto;
+}
+
+.details-container {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.ai-result {
+    white-space: pre-wrap;
+}
+
+.dashboard-card {
+    height: 100%;
+}
+
+.severity-card {
+    height: 100%;
+}
+
+@media (max-width: 767px) {
+    .dashboard-container {
+        padding: 10px;
+    }
+
+    .chart-container {
+        max-width: 280px;
+        height: 250px;
+    }
+}
