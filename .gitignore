@@ -1,0 +1,31 @@
+# Gemini API key and environment files
+.env
+.env.*
+
+# Uploaded log files
+uploads/*
+!uploads/.gitkeep
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Local project data
+analysis_history.json
+
+# Editor settings
+.vscode/
+.idea/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Test and temporary files
+test_ai.py
+*.log
